@@ -19,4 +19,27 @@ export const log = <T>(val: T): T => {
     return val;
 }
 
+export const collect = async <T>(iter: AsyncIterable<T>): Promise<T[]> => {
+    const results: T[] = []
+
+    for await (const result of iter) {
+        results.push(result)
+    }
+
+    return results
+}
+
 export const projectPath = path.dirname(path.fromFileUrl(import.meta.url))
+
+
+const FIRST_PARAGRAPH_EXPRESSION = /<p>((?:.|[\r\n])*?)<\/p>/im;
+const TAGS_EXPRESSION = /<\/?[^>]+>/ig;
+export const getFirstParagraph = (html: string) =>
+    given(new RegExp(FIRST_PARAGRAPH_EXPRESSION).exec(html), result =>
+        given(result[1], blurb =>
+            blurb.trim().replace(new RegExp(TAGS_EXPRESSION), '')))
+
+export const DEFAULT_TITLE = `Brandon's Website`;
+export const DEFAULT_DESCRIPTION = `Personal website of Brandon Smith`;
+export const DOMAIN = `www.brandons.me`;
+export const BASE_URL = `https://${DOMAIN}`

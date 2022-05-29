@@ -25,31 +25,31 @@ export const sortedArt = await(async () => {
 })()
 
 export default () => layout(undefined, undefined, html`
-    <div class="content">
-        <div class="shaded">
-            <h1>
-                Art
-            </h1>
-
-            <div class="spacer large"></div>
-
-            <p>
-                I sometimes make things in Blender (3D), Procreate (drawing/painting), 
-                or Pixel Studio (pixel art). I'm not great at any of them, but I'm
-                trying to get better!
-            </p>
-        </div>
+<div class="content">
+    <div class="shaded">
+        <h1>
+            Art
+        </h1>
 
         <div class="spacer large"></div>
 
-        <div class='items'>
-            ${sortedArt.map(artImg).join('')}
-        </div>
+        <p>
+            I sometimes make things in Blender (3D), Procreate (drawing/painting), 
+            or Pixel Studio (pixel art). I'm not great at any of them, but I'm
+            trying to get better!
+        </p>
     </div>
+
+    <div class="spacer large"></div>
+
+    <div class='items'>
+        ${sortedArt.map(artImg).join('')}
+    </div>
+</div>
 `)
 
 export const artImg = ({ smallPath, largePath }: typeof sortedArt[number]) => html`
-    <div class="art-img" data-smallpath="${smallPath}" data-largepath="${largePath}">
-        <img src="${smallPath}">
-    </div>
+<div class="art-img" data-smallpath="${smallPath}" data-largepath="${largePath}">
+    <img src="${smallPath}">
+</div>
 `

@@ -1,6 +1,6 @@
 
 import { fs, path, server } from './deps.ts'
-import { projectPath } from "./utils.ts";
+import { collect, projectPath } from "./utils.ts";
 
 const ONE_MINUTE = 60
 
@@ -10,7 +10,7 @@ const extToContentType: Record<string, string> = {
     'png': 'image/png',
 
     'html': 'text/html',
-    'xml': 'text/xml',
+    'xml': 'text/rss+xml',
     'css': 'text/css',
 
     'js': 'application/javascript',
@@ -25,44 +25,46 @@ const fileContents = new Map<string, { headers: HeadersInit, content: Uint8Array
 
 // load resources
 const resourcesDir = path.resolve(projectPath, 'resources')
-for await (const file of fs.walk(resourcesDir, { includeDirs: false })) {
-    const ext = path.extname(file.path)
-    const resourcePath = '/' + path.relative(resourcesDir, file.path)
+const allResources = await collect(fs.walk(resourcesDir, { includeDirs: false }))
 
-    if (ext === '.ts') {
-        const module = await import(file.path)
-        const renderFn = module.default
+await Promise.all(
+    allResources.map(async file => {
+        const ext = path.extname(file.path)
+        const resourcePath = '/' + path.relative(resourcesDir, file.path)
 
-        const pagePath = resourcePath.replace(/.ts$/, '')
-        const contentType = extToContentType[path.extname(pagePath)]
-        const headers = { 'Content-Type': contentType, 'Cache-Control': `max-age=${5 * ONE_MINUTE}` }
+        if (ext === '.ts') {
+            const module = await import(file.path)
+            const renderFn = module.default
 
-        const route = pagePath.replace(/.html$/, '')
-        const x = (
-            route === '/index' ? '/' :
-                route.endsWith('/index') ? route.replace(/\/index$/, '') :
-                    route
-        )
+            const pagePath = resourcePath.replace(/.ts$/, '')
+            const contentType = extToContentType[path.extname(pagePath)]
+            const headers = { 'Content-Type': contentType, 'Cache-Control': `max-age=${5 * ONE_MINUTE}` }
 
-        if (x.match(parameterPattern)) {
-            const params = await module.getParams()
+            const route = pagePath.replace(/.html$/, '')
+            const x = (
+                route === '/index' ? '/' :
+                    route.endsWith('/index') ? route.replace(/\/index$/, '') :
+                        route
+            )
 
-            for (const param of params) {
-                const content = await renderFn(param)
-                fileContents.set(x.replace(parameterPattern, '/' + param), { content, headers })
+            if (x.match(parameterPattern)) {
+                for (const param of module.params) {
+                    const content = await renderFn(param)
+                    fileContents.set(x.replace(parameterPattern, '/' + param), { content, headers })
+                }
+            } else {
+                const content = await renderFn()
+                fileContents.set(x, { content, headers })
             }
         } else {
-            const content = await renderFn()
-            fileContents.set(x, { content, headers })
-        }
-    } else {
-        const contentType = extToContentType[ext]
-        const headers = { 'Content-Type': contentType, 'Cache-Control': `max-age=${5 * ONE_MINUTE}` }
+            const contentType = extToContentType[ext]
+            const headers = { 'Content-Type': contentType, 'Cache-Control': `max-age=${5 * ONE_MINUTE}` }
 
-        const content = await Deno.readFile(file.path)
-        fileContents.set(resourcePath, { content, headers })
-    }
-}
+            const content = await Deno.readFile(file.path)
+            fileContents.set(resourcePath, { content, headers })
+        }
+    })
+)
 
 const fourOhFour = fileContents.get('/404') as { headers: HeadersInit, content: Uint8Array }
 
@@ -87,7 +89,11 @@ const s = new server.Server({
 s.serve(Deno.listen({ port }))
 console.log(`Listening on http://localhost:${port}/`)
 
-for await (const _ of Deno.watchFs(projectPath, { recursive: true })) {
-    Deno.run({ cmd: ['deno', 'run', '--allow-all', '--no-check', import.meta.url] })
-    Deno.exit(0)
+if (Deno.args.some(arg => arg === '--watch')) {
+    for await (const change of Deno.watchFs(projectPath, { recursive: true })) {
+        if (change.paths.some(path => !path.includes('.git'))) {
+            Deno.run({ cmd: ['deno', 'run', '--allow-all', '--no-check', import.meta.url, '--watch'] })
+            Deno.exit(0)
+        }
+    }
 }

@@ -3,8 +3,6 @@
     line-height: 1em;
 }
 
-/* rgb(39, 43, 66) */
-
 body {
     --foreground-color: rgba(255, 255, 255, 0.8);
     --background-color: rgb(23, 20, 36);
@@ -26,22 +24,42 @@ body {
     font-family: 'VT323';
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+body * {
+    image-rendering: auto;
+}
+
+:not(article)>h1,
+:not(article)>h2,
+:not(article)>h3,
+:not(article)>h4,
+:not(article)>h5,
+:not(article)>h6 {
     margin: 0;
 }
 
-p {
+:not(article)>p {
     margin: 0;
-    font-size: 22px;
 }
 
 h1 {
     font-size: 48px;
+}
+
+p {
+    font-size: 22px;
+}
+
+article pre>code,
+article blockquote,
+article img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+}
+
+a {
+    color: rgb(40, 109, 224);
 }
 
 header {
@@ -210,7 +228,6 @@ header {
         text-align: center;
     }
 }
-
 
 @keyframes slide-in-left {
     0% {
