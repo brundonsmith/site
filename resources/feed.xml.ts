@@ -1,5 +1,5 @@
+import { localPosts } from "../posts.ts";
 import { BASE_URL, DEFAULT_DESCRIPTION, DEFAULT_TITLE, getFirstParagraph, given } from "../utils.ts";
-import { localPosts } from "./blog/[id].html.ts";
 
 const FEED_HREF = '/feed.xml'
 
@@ -15,8 +15,8 @@ export default () => `
         ${localPosts.map(post => `
             <item>
                 <title>${post.meta.title}</title>
-                <link>${post.meta.url}</link>
-                <guid>${post.meta.url}</guid>
+                <link>${BASE_URL + post.meta.url}</link>
+                <guid>${BASE_URL + post.meta.url}</guid>
                 <pubDate>${post.meta.date.toUTCString()}</pubDate>
                 <description>${post.meta.description}</description>
             </item>

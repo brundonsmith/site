@@ -25,21 +25,20 @@ export default (title: string | null | undefined, description: string | null | u
     <body>
         <header>
             <div class="header-content">
-                ${link('Home', '/',
-    'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fcohenwoodworking.com%2Fwp-content%2Fuploads%2F2016%2F09%2Fimage-placeholder-500x500.jpg&f=1&nofb=1', 'foo')}
+                ${link('Home', '/', '/static/img/home.png', 'home')}
 
                 ${link('Projects', '/projects',
-        'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fcohenwoodworking.com%2Fwp-content%2Fuploads%2F2016%2F09%2Fimage-placeholder-500x500.jpg&f=1&nofb=1', 'foo')}
+    'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fcohenwoodworking.com%2Fwp-content%2Fuploads%2F2016%2F09%2Fimage-placeholder-500x500.jpg&f=1&nofb=1', 'foo')}
                 
                 ${link('Writing', '/writing', '/static/img/coffee.png', 'coffee cup')}
                 
                 ${link('Art', '/art',
-            'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fcohenwoodworking.com%2Fwp-content%2Fuploads%2F2016%2F09%2Fimage-placeholder-500x500.jpg&f=1&nofb=1', 'foo')}
+        'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fcohenwoodworking.com%2Fwp-content%2Fuploads%2F2016%2F09%2Fimage-placeholder-500x500.jpg&f=1&nofb=1', 'foo')}
                 
                 ${link('Dev Blog', '/blog', '/static/img/code.png', 'code brackets')}
 
                 <a href="/feed.xml" rel="noopener" title="RSS" aria-label="RSS">
-                    <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fcohenwoodworking.com%2Fwp-content%2Fuploads%2F2016%2F09%2Fimage-placeholder-500x500.jpg&f=1&nofb=1">
+                    <img src="/static/img/rss.png" alt='RSS icon'>
                     
                     RSS
                 </a>

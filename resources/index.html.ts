@@ -1,6 +1,12 @@
 import { html } from "../utils.ts";
 import layout from '../layout.ts';
-import { artImg, sortedArt } from "./art.html.ts";
+import { artImg, isArt, sortedArt } from "./art.html.ts";
+import { publishedPosts } from "../posts.ts";
+
+const sortedAll = [
+    ...sortedArt,
+    ...publishedPosts
+].sort((a, b) => b.meta.date.valueOf() - a.meta.date.valueOf())
 
 export default async () => layout(undefined, undefined, html`
 <div class="content">
@@ -33,7 +39,18 @@ export default async () => layout(undefined, undefined, html`
     <div class="spacer large"></div>
         
     <div class='items'>
-        ${sortedArt.map(artImg).join('')}
+        ${sortedAll
+        .map(item =>
+            isArt(item)
+                ? artImg(item)
+                : blogPostTile(item))
+        .join('')}
     </div>
 </div>
 `)
+
+const blogPostTile = (item: typeof publishedPosts[number]) => html`
+    <a href="${item.meta.url ?? item.meta.href ?? ''}" class="post-tile shaded">
+        ${item.meta.title}
+    </a>
+`

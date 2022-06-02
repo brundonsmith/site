@@ -1,28 +1,11 @@
 import layout from "../layout.ts";
-import { html, projectPath } from "../utils.ts";
-import { path } from '../deps.ts';
+import { html } from "../utils.ts";
 
-const artDir = path.resolve(projectPath, 'resources/static/img/art')
+import art from '../art.json' assert { type: "json" }
 
-export const sortedArt = await(async () => {
-    const paths: ({ imgPath: string, info: Deno.FileInfo })[] = []
-    for await (const file of Deno.readDir(artDir)) {
-        const imgPath = path.resolve(artDir, file.name)
-        paths.push({ imgPath, info: await Deno.stat(imgPath) })
-    }
-
-    paths.sort((a, b) => (b.info.mtime?.valueOf() ?? 0) - (a.info.mtime?.valueOf() ?? 0))
-
-    return paths.map(({ imgPath }) => {
-        const largePath = '/' + path.relative(path.resolve(projectPath, 'resources'), imgPath)
-        const smallPath = largePath.replace('/art/', '/art-small/')
-
-        return {
-            largePath,
-            smallPath
-        }
-    })
-})()
+export const sortedArt = art
+    .map(a => ({ ...a, meta: { ...a.meta, date: new Date(a.meta.date) } }))
+    .sort((a, b) => b.meta.date.valueOf() - a.meta.date.valueOf())
 
 export default () => layout(undefined, undefined, html`
 <div class="content">
@@ -48,8 +31,11 @@ export default () => layout(undefined, undefined, html`
 </div>
 `)
 
-export const artImg = ({ smallPath, largePath }: typeof sortedArt[number]) => html`
-<div class="art-img" data-smallpath="${smallPath}" data-largepath="${largePath}">
-    <img src="${smallPath}">
+export const artImg = ({ smallImgPath, largeImgPath }: typeof sortedArt[number]) => html`
+<div class="art-img shaded" data-smallpath="${smallImgPath}" data-largepath="${largeImgPath}">
+    <img src="${smallImgPath}">
 </div>
 `
+
+export const isArt = (a: unknown): a is { smallImgPath: string, largeImgPath: string } =>
+    typeof (a as any).smallImgPath === 'string' && typeof (a as any).largeImgPath === 'string'

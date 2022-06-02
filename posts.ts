@@ -1,5 +1,5 @@
 import { path, MarkdownIt } from "./deps.ts";
-import { projectPath, collect, getFirstParagraph, BASE_URL } from "./utils.ts";
+import { projectPath, collect, getFirstParagraph } from "./utils.ts";
 import externalPosts from './blog-posts/external.json' assert { type: "json" }
 
 // @ts-ignore
@@ -65,7 +65,7 @@ const allPosts = await(async () => {
                         date: new Date(date),
                         tags: Array.isArray(tags) ? tags : [],
                         test: test === true,
-                        url: BASE_URL + "/blog/" + id
+                        url: "/blog/" + id
                     },
                     id,
                     content
