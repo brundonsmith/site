@@ -16,4 +16,4 @@ WORKDIR /app
 # Compile the main app so that it doesn't need to be compiled each startup/entry.
 # RUN deno cache --reload index.ts
 
-CMD ["deno", "run", "--cached-only", "--allow-all", "--unstable", "--no-check", "index.ts"]
+CMD ["deno", "run", "--allow-all", "--unstable", "--no-check", "index.ts"]
