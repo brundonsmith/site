@@ -1,135 +1,150 @@
-import { fs, path, server, compress } from './deps.ts'
-import { collect, projectPath } from "./utils.ts";
+import { serve } from "https://deno.land/std@0.123.0/http/server.ts";
 
-const ONE_MINUTE = 60
+const port = 10000;
 
-const extToContentType: Record<string, string> = {
-    '.jpeg': 'image/jpeg',
-    '.jpg': 'image/jpg',
-    '.png': 'image/png',
+const handler = (request: Request): Response => {
+    let body = "Hello from Deno!\n\n";
+    body += "Your user-agent is:\n\n";
+    body += request.headers.get("user-agent") || "Unknown";
 
-    '.html': 'text/html',
-    '.xml': 'text/rss+xml',
-    '.css': 'text/css',
+    return new Response(body, { status: 200 });
+};
 
-    '.js': 'application/javascript',
-    '.json': 'application/json',
+console.log(`HTTP webserver running on port ${port}.`);
+await serve(handler, { hostname: "0.0.0.0", port: port });
 
-    '.ttf': 'font/ttf',
-}
+// import { fs, path, server, compress } from './deps.ts'
+// import { collect, projectPath } from "./utils.ts";
 
-const textFileTypes = new Set(['.html', '.xml', '.css', '.js', '.json', '.ttf'])
+// const ONE_MINUTE = 60
 
-const parameterPattern = /\/\[[^/]+\](?:\.[a-z]+)$/
+// const extToContentType: Record<string, string> = {
+//     '.jpeg': 'image/jpeg',
+//     '.jpg': 'image/jpg',
+//     '.png': 'image/png',
 
-const fileContents = new Map<string, { headers: HeadersInit, content: Uint8Array }>()
+//     '.html': 'text/html',
+//     '.xml': 'text/rss+xml',
+//     '.css': 'text/css',
 
-function createEntry(filePath: string, content: Uint8Array | string) {
-    const ext = path.extname(filePath)
-    const contentType = extToContentType[ext]
-    const isCompressable = textFileTypes.has(ext)
+//     '.js': 'application/javascript',
+//     '.json': 'application/json',
 
-    const encodedContent = typeof content === 'string'
-        ? new TextEncoder().encode(content)
-        : content
+//     '.ttf': 'font/ttf',
+// }
 
-    const baseHeaders = {
-        'Content-Type': contentType,
-        'Cache-Control': `max-age=${5 * ONE_MINUTE}`,
-    }
+// const textFileTypes = new Set(['.html', '.xml', '.css', '.js', '.json', '.ttf'])
 
-    return {
-        content: isCompressable
-            ? compress(encodedContent)
-            : encodedContent,
-        headers: (
-            isCompressable
-                ? {
-                    ...baseHeaders,
-                    'Content-Encoding': 'br'
-                }
-                : baseHeaders
-        )
-    }
-}
+// const parameterPattern = /\/\[[^/]+\](?:\.[a-z]+)$/
 
-function htmlFileToRoute(path: string) {
-    const withoutExtension = path.replace(/.html$/, '')
-    const route = (
-        withoutExtension === '/index' ? '/' :
-            withoutExtension.endsWith('/index') ? withoutExtension.replace(/\/index$/, '') :
-                withoutExtension
-    )
+// const fileContents = new Map<string, { headers: HeadersInit, content: Uint8Array }>()
 
-    return route
-}
+// function createEntry(filePath: string, content: Uint8Array | string) {
+//     const ext = path.extname(filePath)
+//     const contentType = extToContentType[ext]
+//     const isCompressable = textFileTypes.has(ext)
 
-// load resources
-const resourcesDir = path.resolve(projectPath, 'resources')
-const allResources = await collect(fs.walk(resourcesDir, { includeDirs: false }))
+//     const encodedContent = typeof content === 'string'
+//         ? new TextEncoder().encode(content)
+//         : content
 
-await Promise.all(
-    allResources.map(async file => {
-        const ext = path.extname(file.path)
-        const resourcePath = '/' + path.relative(resourcesDir, file.path)
+//     const baseHeaders = {
+//         'Content-Type': contentType,
+//         'Cache-Control': `max-age=${5 * ONE_MINUTE}`,
+//     }
 
-        if (ext === '.ts') {
-            const generatedFilePath = resourcePath.replace(/.ts$/, '')
-            const module = await import(file.path)
-            const { default: renderFn, params } = module
+//     return {
+//         content: isCompressable
+//             ? compress(encodedContent)
+//             : encodedContent,
+//         headers: (
+//             isCompressable
+//                 ? {
+//                     ...baseHeaders,
+//                     'Content-Encoding': 'br'
+//                 }
+//                 : baseHeaders
+//         )
+//     }
+// }
 
-            if (generatedFilePath.match(parameterPattern)) {
-                for (const param of params) {
-                    const parameterizedGeneratedFilePath = generatedFilePath.replace(parameterPattern, '/' + param)
+// function htmlFileToRoute(path: string) {
+//     const withoutExtension = path.replace(/.html$/, '')
+//     const route = (
+//         withoutExtension === '/index' ? '/' :
+//             withoutExtension.endsWith('/index') ? withoutExtension.replace(/\/index$/, '') :
+//                 withoutExtension
+//     )
 
-                    fileContents.set(htmlFileToRoute(parameterizedGeneratedFilePath), createEntry(
-                        parameterizedGeneratedFilePath,
-                        await renderFn(param)
-                    ))
-                }
-            } else {
-                fileContents.set(htmlFileToRoute(generatedFilePath), createEntry(
-                    generatedFilePath,
-                    await renderFn()
-                ))
-            }
-        } else {
-            fileContents.set(resourcePath, createEntry(
-                file.path,
-                await Deno.readFile(file.path)
-            ))
-        }
-    })
-)
+//     return route
+// }
 
-const fourOhFour = fileContents.get('/404') as { headers: HeadersInit, content: Uint8Array }
+// // load resources
+// const resourcesDir = path.resolve(projectPath, 'resources')
+// const allResources = await collect(fs.walk(resourcesDir, { includeDirs: false }))
 
-const port = 8000
-const s = new server.Server({
-    handler: req => {
-        const url = new URL(req.url)
-        const pathname = url.pathname
+// await Promise.all(
+//     allResources.map(async file => {
+//         const ext = path.extname(file.path)
+//         const resourcePath = '/' + path.relative(resourcesDir, file.path)
 
-        const file = fileContents.get(pathname)
+//         if (ext === '.ts') {
+//             const generatedFilePath = resourcePath.replace(/.ts$/, '')
+//             const module = await import(file.path)
+//             const { default: renderFn, params } = module
 
-        if (file) {
-            const { content, headers } = file
-            return new Response(content, { headers })
-        } else {
-            const { content, headers } = fourOhFour
-            return new Response(content, { headers, status: 404 })
-        }
-    }
-})
+//             if (generatedFilePath.match(parameterPattern)) {
+//                 for (const param of params) {
+//                     const parameterizedGeneratedFilePath = generatedFilePath.replace(parameterPattern, '/' + param)
 
-s.serve(Deno.listen({ port }))
-console.log(`Listening on http://localhost:${port}/`)
+//                     fileContents.set(htmlFileToRoute(parameterizedGeneratedFilePath), createEntry(
+//                         parameterizedGeneratedFilePath,
+//                         await renderFn(param)
+//                     ))
+//                 }
+//             } else {
+//                 fileContents.set(htmlFileToRoute(generatedFilePath), createEntry(
+//                     generatedFilePath,
+//                     await renderFn()
+//                 ))
+//             }
+//         } else {
+//             fileContents.set(resourcePath, createEntry(
+//                 file.path,
+//                 await Deno.readFile(file.path)
+//             ))
+//         }
+//     })
+// )
 
-if (Deno.args.some(arg => arg === '--watch')) {
-    for await (const change of Deno.watchFs(projectPath, { recursive: true })) {
-        if (change.paths.some(path => !path.includes('.git'))) {
-            Deno.run({ cmd: ['deno', 'run', '--allow-all', '--no-check', import.meta.url, '--watch'] })
-            Deno.exit(0)
-        }
-    }
-}
+// const fourOhFour = fileContents.get('/404') as { headers: HeadersInit, content: Uint8Array }
+
+// const port = 8000
+// const s = new server.Server({
+//     handler: req => {
+//         const url = new URL(req.url)
+//         const pathname = url.pathname
+
+//         const file = fileContents.get(pathname)
+
+//         if (file) {
+//             const { content, headers } = file
+//             return new Response(content, { headers })
+//         } else {
+//             const { content, headers } = fourOhFour
+//             return new Response(content, { headers, status: 404 })
+//         }
+//     }
+// })
+
+// s.serve(Deno.listen({ port }))
+// console.log(`Listening on http://localhost:${port}/`)
+
+// if (Deno.args.some(arg => arg === '--watch')) {
+//     for await (const change of Deno.watchFs(projectPath, { recursive: true })) {
+//         if (change.paths.some(path => !path.includes('.git'))) {
+//             Deno.run({ cmd: ['deno', 'run', '--allow-all', '--no-check', import.meta.url, '--watch'] })
+//             Deno.exit(0)
+//         }
+//     }
+// }
