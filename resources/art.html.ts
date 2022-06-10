@@ -17,8 +17,8 @@ export default () => layout(undefined, undefined, html`
         <div class="spacer large"></div>
 
         <p class="no-margin">
-            I sometimes make things in Blender (3D), Procreate (drawing/painting), 
-            or Pixel Studio (pixel art). I'm still learning, but it makes me happy!
+            I make different kinds of things in Blender, Procreate, 
+            and Pixel Studio
         </p>
     </div>
 

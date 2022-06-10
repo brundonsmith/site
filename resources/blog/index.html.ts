@@ -18,7 +18,6 @@ export default () => layout(undefined, undefined, html`
     </div>
 
     <div class="spacer large"></div>
-    <div class="spacer large"></div>
 
     ${publishedPosts.map(post => html`
     <a class="post-link shaded" href="${post.meta.href ?? post.meta.url ?? ''}">

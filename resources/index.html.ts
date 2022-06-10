@@ -23,12 +23,12 @@ export default async () => layout(undefined, undefined, html`
             <div class="spacer large"></div>
         
             <p class="no-margin">
-                Welcome to my little space on the internet!
+                I like writing, programming, Celtic music, coffee, and making 
+                digital art. I share some of that on here.
 
                 <br><br>
 
-                This is a place where I share all the different kinds of 
-                stuff I make. I like to make art, code, and write things. Hope you enjoy!
+                Welcome to my little space on the internet!
             </p>
         </div>
     </div>
