@@ -27,10 +27,10 @@ export default (title: string | null | undefined, description: string | null | u
             <div class="header-content">
                 ${link('Home', '/', '/static/img/home.png', 'home')}
 
-                ${link('Projects', '/projects',
-    'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fcohenwoodworking.com%2Fwp-content%2Fuploads%2F2016%2F09%2Fimage-placeholder-500x500.jpg&f=1&nofb=1', 'foo')}
+                <!-- ${link('Projects', '/projects',
+    'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fcohenwoodworking.com%2Fwp-content%2Fuploads%2F2016%2F09%2Fimage-placeholder-500x500.jpg&f=1&nofb=1', 'foo')} -->
                 
-                ${link('Writing', '/writing', '/static/img/coffee.png', 'coffee cup')}
+                <!-- ${link('Writing', '/writing', '/static/img/coffee.png', 'coffee cup')} -->
                 
                 ${link('Art', '/art', '/static/img/art.png', 'painter\'s palette')}
                 
