@@ -1,27 +1,69 @@
 
-import { fs, path, server } from './deps.ts'
+import { fs, path, server, compress } from './deps.ts'
 import { collect, projectPath } from "./utils.ts";
 
 const ONE_MINUTE = 60
 
 const extToContentType: Record<string, string> = {
-    'jpeg': 'image/jpeg',
-    'jpg': 'image/jpg',
-    'png': 'image/png',
+    '.jpeg': 'image/jpeg',
+    '.jpg': 'image/jpg',
+    '.png': 'image/png',
 
-    'html': 'text/html',
-    'xml': 'text/rss+xml',
-    'css': 'text/css',
+    '.html': 'text/html',
+    '.xml': 'text/rss+xml',
+    '.css': 'text/css',
 
-    'js': 'application/javascript',
-    'json': 'application/json',
+    '.js': 'application/javascript',
+    '.json': 'application/json',
 
-    'ttf': 'font/ttf',
+    '.ttf': 'font/ttf',
 }
 
-const parameterPattern = /\/\[[^/]+\]$/
+const textFileTypes = new Set(['.html', '.xml', '.css', '.js', '.json', '.ttf'])
+
+const parameterPattern = /\/\[[^/]+\](?:\.[a-z]+)$/
 
 const fileContents = new Map<string, { headers: HeadersInit, content: Uint8Array }>()
+
+function createEntry(filePath: string, content: Uint8Array | string) {
+    const ext = path.extname(filePath)
+    const contentType = extToContentType[ext]
+    const isCompressable = textFileTypes.has(ext)
+
+    const encodedContent = typeof content === 'string'
+        ? new TextEncoder().encode(content)
+        : content
+
+    const baseHeaders = {
+        'Content-Type': contentType,
+        'Cache-Control': `max-age=${5 * ONE_MINUTE}`,
+    }
+
+    return {
+        content: isCompressable
+            ? compress(encodedContent)
+            : encodedContent,
+        headers: (
+            isCompressable
+                ? {
+                    ...baseHeaders,
+                    'Content-Encoding': 'br'
+                }
+                : baseHeaders
+        )
+    }
+}
+
+function htmlFileToRoute(path: string) {
+    const withoutExtension = path.replace(/.html$/, '')
+    const route = (
+        withoutExtension === '/index' ? '/' :
+            withoutExtension.endsWith('/index') ? withoutExtension.replace(/\/index$/, '') :
+                withoutExtension
+    )
+
+    return route
+}
 
 // load resources
 const resourcesDir = path.resolve(projectPath, 'resources')
@@ -33,35 +75,30 @@ await Promise.all(
         const resourcePath = '/' + path.relative(resourcesDir, file.path)
 
         if (ext === '.ts') {
+            const generatedFilePath = resourcePath.replace(/.ts$/, '')
             const module = await import(file.path)
-            const renderFn = module.default
+            const { default: renderFn, params } = module
 
-            const pagePath = resourcePath.replace(/.ts$/, '')
-            const contentType = extToContentType[path.extname(pagePath)]
-            const headers = { 'Content-Type': contentType, 'Cache-Control': `max-age=${5 * ONE_MINUTE}` }
+            if (generatedFilePath.match(parameterPattern)) {
+                for (const param of params) {
+                    const parameterizedGeneratedFilePath = generatedFilePath.replace(parameterPattern, '/' + param)
 
-            const route = pagePath.replace(/.html$/, '')
-            const x = (
-                route === '/index' ? '/' :
-                    route.endsWith('/index') ? route.replace(/\/index$/, '') :
-                        route
-            )
-
-            if (x.match(parameterPattern)) {
-                for (const param of module.params) {
-                    const content = await renderFn(param)
-                    fileContents.set(x.replace(parameterPattern, '/' + param), { content, headers })
+                    fileContents.set(htmlFileToRoute(parameterizedGeneratedFilePath), createEntry(
+                        parameterizedGeneratedFilePath,
+                        await renderFn(param)
+                    ))
                 }
             } else {
-                const content = await renderFn()
-                fileContents.set(x, { content, headers })
+                fileContents.set(htmlFileToRoute(generatedFilePath), createEntry(
+                    generatedFilePath,
+                    await renderFn()
+                ))
             }
         } else {
-            const contentType = extToContentType[ext]
-            const headers = { 'Content-Type': contentType, 'Cache-Control': `max-age=${5 * ONE_MINUTE}` }
-
-            const content = await Deno.readFile(file.path)
-            fileContents.set(resourcePath, { content, headers })
+            fileContents.set(resourcePath, createEntry(
+                file.path,
+                await Deno.readFile(file.path)
+            ))
         }
     })
 )
