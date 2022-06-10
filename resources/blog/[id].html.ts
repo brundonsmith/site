@@ -13,23 +13,23 @@ export default (id: string) => {
 
     return layout(post.meta.title, post.meta.description, html`
     <article class="content">
-        ${post.meta.title ?
+        <div class="article-body">
+            ${post.meta.title ?
             html`
-            <h1 style="margin: 0">
-                ${post.meta.title}
-            </h1>
+                <h1 class="no-margin">
+                    ${post.meta.title}
+                </h1>
 
-            <div class="spacer small"></div>
+                <div class="spacer small"></div>
 
-            <div>
-                ${post.meta.date.toDateString()}
-            </div>
-
-            <div class="spacer large"></div>
-            `
+                <div>
+                    ${post.meta.date.toDateString()}
+                </div>
+                `
             : ''}
 
-        ${post.content ?? ''}
+            ${post.content ?? ''}
+        </div>
     </article>
     `)
 }

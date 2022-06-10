@@ -24,20 +24,16 @@ body {
     font-family: 'VT323';
 }
 
+pre,
+code {
+    font-family: inherit;
+}
+
 body * {
     image-rendering: auto;
 }
 
-:not(article)>h1,
-:not(article)>h2,
-:not(article)>h3,
-:not(article)>h4,
-:not(article)>h5,
-:not(article)>h6 {
-    margin: 0;
-}
-
-:not(article)>p {
+.no-margin {
     margin: 0;
 }
 
@@ -45,7 +41,9 @@ h1 {
     font-size: 48px;
 }
 
-p {
+p,
+ul,
+ol {
     font-size: 22px;
 }
 
@@ -143,6 +141,14 @@ header {
     overflow: auto;
 }
 
+@media (min-width: 700px) {
+    .article-body {
+        background-color: var(--background-color);
+        border: 2px solid var(--shadow-color);
+        padding: 16px;
+    }
+}
+
 .items {
     display: flex;
     justify-content: center;
@@ -210,11 +216,11 @@ header {
 }
 
 .post-tile::before {
-    content: '- dev blog post -';
+    content: '<dev blog post/>';
     display: block;
     text-align: center;
     color: var(--foreground-color);
-    opacity: 0.7;
+    opacity: 0.6;
     font-size: 0.75em;
     margin-bottom: 0.5em;
 }
@@ -233,6 +239,7 @@ header {
 .post-link>.datestamp {
     color: var(--foreground-color);
     opacity: 0.7;
+    white-space: nowrap;
 }
 
 

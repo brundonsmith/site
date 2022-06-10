@@ -16,14 +16,19 @@ export default async () => layout(undefined, undefined, html`
         <div class="spacer large"></div>
         
         <div class="about shaded">
-            <h1>
+            <h1 class="no-margin">
                 Hi, I'm Brandon!
             </h1>
 
             <div class="spacer large"></div>
         
-            <p>
-                klasdfhsdklfgjhsldkfghlkh
+            <p class="no-margin">
+                Welcome to my little space on the internet!
+
+                <br><br>
+
+                This is a place where I share all the different kinds of 
+                stuff I make. I like to make art, code, and write things. Hope you enjoy!
             </p>
         </div>
     </div>
@@ -32,7 +37,7 @@ export default async () => layout(undefined, undefined, html`
     
     <div class="spacer large"></div>
         
-    <h2 class="up-to">
+    <h2 class="no-margin up-to">
         What I've been up to
     </h2>
 

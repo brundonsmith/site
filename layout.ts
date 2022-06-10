@@ -50,6 +50,9 @@ export default (title: string | null | undefined, description: string | null | u
 
         ${content}
 
+        <div class="spacer large"></div>
+        <div class="spacer large"></div>
+
         <script src="/static/js/prism.js"></script>
     </body>
 </html>

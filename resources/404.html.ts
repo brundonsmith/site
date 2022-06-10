@@ -4,7 +4,7 @@ import { html } from "../utils.ts";
 export default () => layout(undefined, undefined, html`
     <div class="spacer large"></div>
     <div class="content shaded">
-        <h1>
+        <h1 class="no-margin">
             Whoops! This page doesn't exist.
         </h1>
     </div>
