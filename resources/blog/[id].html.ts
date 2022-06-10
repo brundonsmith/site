@@ -15,9 +15,16 @@ export default (id: string) => {
     <article class="content">
         ${post.meta.title ?
             html`
-            <h1>
+            <h1 style="margin: 0">
                 ${post.meta.title}
             </h1>
+
+            <div class="spacer small"></div>
+
+            <div>
+                ${post.meta.date.toDateString()}
+            </div>
+
             <div class="spacer large"></div>
             `
             : ''}
