@@ -32,10 +32,13 @@ export default (title: string | null | undefined, description: string | null | u
                 
                 ${link('Writing', '/writing', '/static/img/coffee.png', 'coffee cup')}
                 
-                ${link('Art', '/art',
-        'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fcohenwoodworking.com%2Fwp-content%2Fuploads%2F2016%2F09%2Fimage-placeholder-500x500.jpg&f=1&nofb=1', 'foo')}
+                ${link('Art', '/art', '/static/img/art.png', 'painter\'s palette')}
                 
-                ${link('Dev Blog', '/blog', '/static/img/code.png', 'code brackets')}
+                <a href="/blog">
+                    &lt;/&gt;
+                    
+                    Dev Blog
+                </a>
 
                 <a href="/feed.xml" rel="noopener" title="RSS" aria-label="RSS">
                     <img src="/static/img/rss.png" alt='RSS icon'>
