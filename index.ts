@@ -1,4 +1,3 @@
-
 import { fs, path, server, compress } from './deps.ts'
 import { collect, projectPath } from "./utils.ts";
 
