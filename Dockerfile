@@ -16,4 +16,4 @@ ADD . .
 # Compile the main app so that it doesn't need to be compiled each startup/entry.
 RUN deno cache --reload --lock=lock.json index.ts
 
-CMD ["run", "--cached-only", "--allow-net", "index.ts"]
+CMD ["run", "--cached-only", "--allow-all", "index.ts"]
