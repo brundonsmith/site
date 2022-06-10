@@ -12,8 +12,8 @@ WORKDIR /app
 #RUN deno cache deps.ts
 
 # These steps will be re-run upon each file change in your working directory:
-ADD . .
+# ADD . .
 # Compile the main app so that it doesn't need to be compiled each startup/entry.
-RUN deno cache --reload index.ts
+# RUN deno cache --reload index.ts
 
-CMD ["run", "--cached-only", "--allow-all", "--no-check", "index.ts"]
+CMD ["deno", "run", "--cached-only", "--allow-all", "--no-check", "index.ts"]
