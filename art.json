@@ -215,5 +215,26 @@
     "meta": {
       "date": "Sat Jan 09 2021 16:06:38 GMT-0600 (Central Standard Time)"
     }
+  },
+  {
+    "largeImgPath": "/static/img/art/2022-06-17 23.26.54.png",
+    "smallImgPath": "/static/img/art-small/2022-06-17 23.26.54.png",
+    "meta": {
+      "date": "Sat Jun 17 2022 23:26:54 GMT-0600 (Central Standard Time)"
+    }
+  },
+  {
+    "largeImgPath": "/static/img/art/2022-06-18 15.27.47.png",
+    "smallImgPath": "/static/img/art-small/2022-06-18 15.27.47.png",
+    "meta": {
+      "date": "Sat Jun 18 2022 15:27:47 GMT-0600 (Central Standard Time)"
+    }
+  },
+  {
+    "largeImgPath": "/static/img/art/2022-06-19 12.06.40.png",
+    "smallImgPath": "/static/img/art-small/2022-06-19 12.06.40.png",
+    "meta": {
+      "date": "Sat Jun 19 2022 12:06:40 GMT-0600 (Central Standard Time)"
+    }
   }
 ]
