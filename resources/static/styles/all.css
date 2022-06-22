@@ -7,7 +7,7 @@ body {
     --foreground-color: rgba(255, 255, 255, 0.8);
     --background-color: rgb(23, 20, 36);
     --sky-color: rgb(39, 43, 66);
-    --shadow-color: var(--foreground-color);
+    --shadow-color: rgba(80, 80, 80, 1);
     --shadow-size: 8px;
 
     margin: 0;
