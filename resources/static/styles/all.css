@@ -198,12 +198,18 @@ header {
     left: 0;
     width: 100vw;
     height: 100vh;
-    padding: 48px;
+    padding: 24px;
     margin: 0;
     background-color: rgba(0, 0, 0, 0.7);
     box-shadow: none;
     border: none;
     z-index: 1;
+}
+
+@media (min-width: 700px) {
+    .art-img.selected {
+        padding: 48px;
+    }
 }
 
 .art-img.selected>img {
