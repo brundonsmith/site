@@ -24,7 +24,7 @@ export default (id?: string) => {
 
                 <div class="spacer small"></div>
 
-                <div>
+                <div class="datestamp">
                     ${post.meta.date.toDateString()}
                 </div>
                 `
