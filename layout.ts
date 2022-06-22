@@ -41,7 +41,7 @@ export default (title: string | null | undefined, description: string | null | u
                 </a>
 
                 <a href="/feed.xml" rel="noopener" title="RSS" aria-label="RSS">
-                    <img src="/static/img/rss.png" alt='RSS icon'>
+                    <img class="crisp" src="/static/img/rss.png" alt='RSS icon'>
                     
                     RSS
                 </a>
@@ -60,7 +60,7 @@ export default (title: string | null | undefined, description: string | null | u
 
 const link = (label: string, href: string, image: string, imageAlt: string) => html`
 <a href="${href}">
-    <img src="${image}" alt="${imageAlt}">
+    <img class="crisp" src="${image}" alt="${imageAlt}">
     
     ${label}
 </a>
