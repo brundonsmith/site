@@ -31,8 +31,10 @@ export default () => layout(undefined, undefined, html`
 `)
 
 export const artImg = ({ smallImgPath, largeImgPath, renderCrisp }: typeof sortedArt[number]) => html`
-<div class="art-img shaded" data-smallpath="${smallImgPath}" data-largepath="${largeImgPath}">
-    <img class="${renderCrisp ? 'crisp' : ''}" src="${smallImgPath}">
+<div class="art-img-placeholder">
+    <div class="art-img shaded" data-smallpath="${smallImgPath}" data-largepath="${largeImgPath}">
+        <img class="${renderCrisp ? 'crisp' : ''}" src="${smallImgPath}">
+    </div>
 </div>
 `
 

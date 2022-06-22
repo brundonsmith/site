@@ -170,13 +170,18 @@ header {
     margin: var(--item-margin);
 }
 
-.art-img {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.art-img-placeholder {
     cursor: pointer;
     width: 128px;
     height: 128px;
+}
+
+.art-img-placeholder>.art-img {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 0;
 }
 
@@ -185,13 +190,6 @@ header {
     height: 100%;
     object-fit: cover;
     object-position: center;
-}
-
-.art-img:hover:not(.selected) {
-    transform: scale(2);
-    box-shadow: none;
-    border: none;
-    z-index: 1;
 }
 
 .art-img.selected {
@@ -236,8 +234,17 @@ header {
     margin-bottom: 0.5em;
 }
 
-.post-tile:hover {
-    transform: scale(1.1);
+@media (pointer: fine) {
+    .art-img:hover:not(.selected) {
+        transform: scale(2);
+        box-shadow: none;
+        border: none;
+        z-index: 1;
+    }
+
+    .post-tile:hover {
+        transform: scale(1.1);
+    }
 }
 
 .post-link {

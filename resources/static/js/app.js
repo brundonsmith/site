@@ -1,6 +1,7 @@
 
 window.addEventListener('load', () => {
-    document.addEventListener('click', e => {
+    document.addEventListener('pointerup', e => {
+        console.log('pointerup')
         const artImg = (
             e.target.classList.contains('art-img') ? e.target :
                 e.target.parentElement?.classList.contains('art-img') ? e.target.parentElement :
