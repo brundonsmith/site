@@ -1,5 +1,6 @@
 import { fs, path, server, compress } from './deps.ts'
-import { collect, projectPath } from "./utils.ts";
+import { allResources, projectPath, resourcesDir } from "./utils.ts";
+import routes from './routes-manifest.ts'
 
 const ONE_MINUTE = 60
 
@@ -65,9 +66,6 @@ function htmlFileToRoute(path: string) {
 }
 
 // load resources
-const resourcesDir = path.resolve(projectPath, 'resources')
-const allResources = await collect(fs.walk(resourcesDir, { includeDirs: false }))
-
 await Promise.all(
     allResources.map(async file => {
         const ext = path.extname(file.path)
@@ -75,10 +73,10 @@ await Promise.all(
 
         if (ext === '.ts') {
             const generatedFilePath = resourcePath.replace(/.ts$/, '')
-            const module = await import(file.path)
+            const module = routes['./' + path.relative(projectPath, file.path)]
             const { default: renderFn, params } = module
 
-            if (generatedFilePath.match(parameterPattern)) {
+            if (generatedFilePath.match(parameterPattern) && params) {
                 for (const param of params) {
                     const parameterizedGeneratedFilePath = generatedFilePath.replace(parameterPattern, '/' + param)
 

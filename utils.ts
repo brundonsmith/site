@@ -1,4 +1,4 @@
-import { path } from "./deps.ts";
+import { fs, path } from "./deps.ts";
 
 export const html = (segments: TemplateStringsArray, ...inserts: string[]) =>
     segments
@@ -30,6 +30,8 @@ export const collect = async <T>(iter: AsyncIterable<T>): Promise<T[]> => {
 }
 
 export const projectPath = path.dirname(path.fromFileUrl(import.meta.url))
+export const resourcesDir = path.resolve(projectPath, 'resources')
+export const allResources = await collect(fs.walk(resourcesDir, { includeDirs: false }))
 
 
 const FIRST_PARAGRAPH_EXPRESSION = /<p>((?:.|[\r\n])*?)<\/p>/im;

@@ -4,9 +4,11 @@ import { html } from "../../utils.ts";
 import fourOhFour from '../404.html.ts'
 
 
-export const params = localPosts.map(post => post.id).filter(id => id != null)
+export const params = localPosts.map(post => post.id).filter((id): id is string => id != null)
 
-export default (id: string) => {
+export default (id?: string) => {
+    if (id == null) throw Error('Unreachable!')
+
     const post = localPosts.find(p => p.id === id)
 
     if (post == null) return fourOhFour()
