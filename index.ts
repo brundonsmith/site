@@ -1,6 +1,6 @@
-import { fs, path, server, compress } from './deps.ts'
+import { path, server, compress } from './deps.ts'
 import { allResources, projectPath, resourcesDir } from "./utils.ts";
-import routes from './routes-manifest.ts'
+import importModule from './routes-manifest.ts'
 
 const ONE_MINUTE = 60
 
@@ -73,7 +73,7 @@ await Promise.all(
 
         if (ext === '.ts') {
             const generatedFilePath = resourcePath.replace(/.ts$/, '')
-            const module = routes['./' + path.relative(projectPath, file.path)]
+            const module = importModule('./' + path.relative(projectPath, file.path))
             const { default: renderFn, params } = module
 
             if (generatedFilePath.match(parameterPattern) && params) {

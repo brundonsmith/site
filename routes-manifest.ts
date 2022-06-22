@@ -23,4 +23,4 @@ const routes: {[key: string]: Route} = {
     ['./resources/404.html.ts']: { default: ___resources_404_html_ts }
 }
 
-export default routes
+export default (module: string) => routes[module]

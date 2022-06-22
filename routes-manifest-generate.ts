@@ -35,7 +35,7 @@ ${routeModules.map(({ module, hasParams }) =>
         `    ['${module}']: { default: ${moduleIdentifier(module)}${hasParams ? `, params: ${moduleIdentifier(module)}_params` : ''} }`).join(',\n')}
 }
 
-export default routes
+export default (module: string) => routes[module]
 `
 
 Deno.writeTextFileSync(path.resolve(projectPath, 'routes-manifest.ts'), manifest)
