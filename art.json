@@ -39,7 +39,8 @@
     "smallImgPath": "/static/img/art-small/2022-05-28_16.20.03.png",
     "meta": {
       "date": "Sat May 28 2022 16:20:03 GMT-0500 (Central Daylight Time)"
-    }
+    },
+    "renderCrisp": true
   },
   {
     "largeImgPath": "/static/img/art/ramenbowl2.png",
@@ -74,7 +75,8 @@
     "smallImgPath": "/static/img/art-small/2022-05-26_00.03.21.png",
     "meta": {
       "date": "Thu May 26 2022 00:03:21 GMT-0500 (Central Daylight Time)"
-    }
+    },
+    "renderCrisp": true
   },
   {
     "largeImgPath": "/static/img/art/BackAlleyNoodleShop.png",
@@ -88,14 +90,16 @@
     "smallImgPath": "/static/img/art-small/2022-05-23_00.06.06.png",
     "meta": {
       "date": "Mon May 23 2022 00:06:06 GMT-0500 (Central Daylight Time)"
-    }
+    },
+    "renderCrisp": true
   },
   {
     "largeImgPath": "/static/img/art/2022-05-21_18.31.00.png",
     "smallImgPath": "/static/img/art-small/2022-05-21_18.31.00.png",
     "meta": {
       "date": "Sat May 21 2022 18:31:00 GMT-0500 (Central Daylight Time)"
-    }
+    },
+    "renderCrisp": true
   },
   {
     "largeImgPath": "/static/img/art/2022-04-17_16.37.25.png",
@@ -116,7 +120,8 @@
     "smallImgPath": "/static/img/art-small/2022-05-21_23.38.00.png",
     "meta": {
       "date": "Sat May 21 2022 23:38:00 GMT-0500 (Central Daylight Time)"
-    }
+    },
+    "renderCrisp": true
   },
   {
     "largeImgPath": "/static/img/art/ramenbowl.png",
@@ -158,7 +163,8 @@
     "smallImgPath": "/static/img/art-small/2022-05-26_01.13.14.png",
     "meta": {
       "date": "Thu May 26 2022 01:13:14 GMT-0500 (Central Daylight Time)"
-    }
+    },
+    "renderCrisp": true
   },
   {
     "largeImgPath": "/static/img/art/2022-04-02_17.33.56.png",
@@ -221,20 +227,23 @@
     "smallImgPath": "/static/img/art-small/2022-06-17_23.26.54.png",
     "meta": {
       "date": "Sat Jun 17 2022 23:26:54 GMT-0600 (Central Standard Time)"
-    }
+    },
+    "renderCrisp": true
   },
   {
     "largeImgPath": "/static/img/art/2022-06-18_15.27.47.png",
     "smallImgPath": "/static/img/art-small/2022-06-18_15.27.47.png",
     "meta": {
       "date": "Sat Jun 18 2022 15:27:47 GMT-0600 (Central Standard Time)"
-    }
+    },
+    "renderCrisp": true
   },
   {
     "largeImgPath": "/static/img/art/2022-06-19_12.06.40.png",
     "smallImgPath": "/static/img/art-small/2022-06-19_12.06.40.png",
     "meta": {
       "date": "Sat Jun 19 2022 12:06:40 GMT-0600 (Central Standard Time)"
-    }
+    },
+    "renderCrisp": true
   }
 ]

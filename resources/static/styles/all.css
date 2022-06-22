@@ -214,6 +214,11 @@ header {
     object-fit: contain;
 }
 
+.crisp {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
 .post-tile {
     width: 128px;
     height: 128px;
